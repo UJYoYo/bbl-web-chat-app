@@ -10,12 +10,12 @@ Backend -> Database: store authToken
 Backend -> Frontend: return authToken
 Frontend -> User: display main page
 
-----------------------------------------------------------------------------------------------------------
+---
 
 title UseCase: Send Friend Request
 User -> Frontend: enter { username }
 Frontend -> Backend: GET /getUser { username }
-Backend -> Database: SELECT * FROM users WHERE username LIKE { %username% }
+Backend -> Database: SELECT \* FROM users WHERE username LIKE { %username% }
 Database -> Backend: { users }
 Backend -> Frontend: { users.json }
 Frontend -> User: display users list
@@ -26,7 +26,7 @@ Database -> Backend: success
 Backend -> Frontend: success
 Frontend -> User: "requent sent"
 
-----------------------------------------------------------------------------------------------------------
+---
 
 title UseCase: Accept Friend Request
 User -> Frontend: Click Pending Page
@@ -42,7 +42,7 @@ Database -> Backend: success
 Backend -> Frontend: success
 Frontend -> User: Refresh Pending Page
 
-----------------------------------------------------------------------------------------------------------
+---
 
 title UseCase: Send Message
 entryspacing 0.9
@@ -60,7 +60,7 @@ Backend -->> Socket.IO Server: emit("new_message", { room_id, message, sender_id
 Socket.IO Server -->> Frontend (User B): receive("new_message", { room_id, message, sender_id })
 Frontend (User B) --> User B: display incoming message
 
-----------------------------------------------------------------------------------------------------------
+---
 
 title UseCase: Send Message #2
 
@@ -87,3 +87,11 @@ Database --> Backend: success
 Backend -->> Socket.IO Server: emit("new_message", { room_id, message, sender_id })
 Socket.IO Server -->> Frontend (User B): receive("new_message", { room_id, message, sender_id })
 Frontend (User B) --> User B: display incoming message
+
+---
+
+System Architecture
+
+Frontend: React
+Backend: Springboot Java
+Database: Postgres
