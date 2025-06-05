@@ -16,7 +16,6 @@
     <maven.compiler.release>22</maven.compiler.release>
   </properties>
 
-
   <dependencies>
     <!-- Spring Boot Web Dependency -->
     <dependency>
@@ -25,7 +24,7 @@
         <version>3.4.6</version>
     </dependency>
 
-    <!-- JUnit 5 Dependency (For Testing) -->
+    <!-- JUnit 5 Dependencies (For Testing) -->
     <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
@@ -41,20 +40,24 @@
     </dependency>
   </dependencies>
 
-
-
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.0</version> <!-- Updated to latest version -->
-          <configuration>
-            <release>22</release>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+    <plugins>
+      <!-- Spring Boot Maven Plugin -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.4.6</version>
+      </plugin>
+
+      <!-- Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.14.0</version> <!-- Latest version -->
+        <configuration>
+          <release>22</release>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
