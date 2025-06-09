@@ -1,6 +1,7 @@
 Install:
 - Spring boot extension
 - Java minimum v22
+- Install Maven
 
 Re-build XML File:
     mvn clean install
