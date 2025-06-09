@@ -1,2 +1,4 @@
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/Backend/demo/src/main/java/com/web_chat/App.java
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/Backend/demo/src/main/java/com/web_chat/HelloController.java
+/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/Backend/demo/src/main/java/com/web_chat/FriendController.java
+/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/Backend/demo/src/main/java/com/web_chat/HomeController.java
+/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/Backend/demo/src/main/java/com/web_chat/MessageController.java
