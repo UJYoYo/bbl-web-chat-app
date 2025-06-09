@@ -18,9 +18,9 @@ function Register() {
   return (
     <>
       <div className="register-container">
-        <h1>Prajogo Talk</h1>
-        <form onSubmit={handleRegister}>
-          <div className="form">
+        <h1>Balapao Talk</h1>
+        <form onSubmit={handleRegister} className="form">
+          <div className="form-row">
             <label htmlFor="username">Username: </label>
             <input
               type="text"
@@ -30,7 +30,7 @@ function Register() {
             />
           </div>
 
-          <div className="form">
+          <div className="form-row">
             <label htmlFor="password">Password: </label>
             <input
               type="password"
@@ -39,10 +39,12 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="button-container">
+
+          <div className="a-container">
             <button type="submit">Register</button>
           </div>
         </form>
+
       </div>
     </>
   );

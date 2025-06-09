@@ -7,16 +7,30 @@
 }
 
 h1 {
-  font-size: 50px;
+  font-size: 90px;
   margin-bottom: 20px;
   color: #646cff;
-  /* text-align: center; */
 }
 
+label {
+  font-size: 25px;
+  width: 140px;
+  /* Fix width so everything lines up */
+  text-align: right;
+}
+
+
 .form {
-  /* display: flex; */
-  /* flex-direction: column; */
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .button-container {

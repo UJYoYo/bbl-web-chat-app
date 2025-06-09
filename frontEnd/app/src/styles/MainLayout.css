@@ -1,11 +1,3 @@
-#root {
-    width: 100%;
-    margin: 0;
-    padding: 2rem;
-    text-align: left;
-    min-height: 100vh;
-}
-
 .chat-layout {
     text-align: left;
     min-height: 1000vh;
@@ -16,11 +8,33 @@
 .chat-header h1 {
     margin: 0;
     text-align: left;
-    font-size: 1rem;
+    /* font-size: 1rem; */
+    font-size: 30px;
     font-weight: 600;
-    background: linear-gradient(45deg, #646cff, #747bff);
+    /* background: linear-gradient(45deg, #ffffff, #646464); */
+    background-color: #ffffff;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chat-header nav {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1rem;
+}
+
+.nav-button {
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    background-color: #646cff88;
+    color: #ffffff84;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-button.active {
+    background-color: #646cff;
+    color: #ffffff;
 }
