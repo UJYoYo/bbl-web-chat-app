@@ -40,7 +40,7 @@ function Register() {
             />
           </div>
 
-          <div className="a-container">
+          <div className="button-container">
             <button type="submit">Register</button>
           </div>
         </form>
