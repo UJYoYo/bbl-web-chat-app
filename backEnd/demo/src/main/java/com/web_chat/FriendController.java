@@ -1,3 +1,4 @@
+// Controller for managing friends in a web chat application
 package com.web_chat;
 
 import org.springframework.web.bind.annotation.GetMapping;

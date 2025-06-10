@@ -1,3 +1,4 @@
+// Controller for handling home page
 package com.web_chat;
 
 import org.springframework.web.bind.annotation.GetMapping;
