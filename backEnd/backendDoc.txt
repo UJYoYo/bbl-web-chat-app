@@ -2,7 +2,8 @@ Install:
 - Spring boot extension
 - Java minimum v22
 - Install Maven
-
+- PostgreSQL
+- psql -d chatdb -f schema.sql (Connect to db)
 Re-build XML File:
     mvn clean install
 Run Sprint Boot:
