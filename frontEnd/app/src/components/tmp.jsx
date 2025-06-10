@@ -26,6 +26,24 @@ function ChatLayout() {
   }
   // console.log(chatRoom[0].name);
 
+   //test endpoint
+   const fetchHelloEndPoint = async () => {
+    try {
+        const response = await fetch('http://localhost:1234/hello');
+
+        if (!response.ok) {
+            console.log("dead", response.status);
+        }
+        const data = await response.text();
+        console.log(data);
+    }
+    catch (error) {
+        console.error('error');
+    }
+}
+useEffect(() => {
+    fetchHelloEndPoint();
+}, []);
   return (
     <>
       {tabs.map((tab) =>
