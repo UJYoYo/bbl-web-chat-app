@@ -119,28 +119,7 @@ public class FriendController {
         }
     }
 
-    // Function to get all friend requests for a user
-    // /friends/getRequests?username=john
-    @GetMapping("/getPendingRequests")
-    public ResponseEntity<?> getRequests(@RequestParam("username") String username) {
-        try {
-            User user = userService.findByUsername(username);
-            
-            if (user == null) {
-                ApiResponse response = new ApiResponse("User not found", false);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-            
-            // Get all friend requests for this user (both sent and received)
-            List<FriendRequest> allRequests = friendRequestService.getAllRequestsForUser(user.getUserId());
-            
-            return ResponseEntity.ok(allRequests);
-            
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse("Error retrieving friend requests: " + e.getMessage(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
+
     
     // Get only pending requests received by a user
     @GetMapping("/getPendingRequests")

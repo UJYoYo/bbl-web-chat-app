@@ -1,8 +1,6 @@
+com/web_chat/App.class
 com/web_chat/MessageController$messageBody.class
 com/web_chat/entity/User.class
-com/web_chat/FriendController$sendRequestBody.class
-com/web_chat/HomeController$userBody.class
 com/web_chat/MessageController.class
 com/web_chat/FriendController.class
 com/web_chat/HomeController.class
-com/web_chat/App.class
