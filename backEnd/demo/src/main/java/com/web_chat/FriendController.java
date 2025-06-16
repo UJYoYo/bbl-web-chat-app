@@ -65,8 +65,7 @@ public class FriendController {
             User user = userService.findByUsername(username);
             
             if (user != null) {
-                return ResponseEntity.ok(new Object() {
-                });
+                return ResponseEntity.ok(user);
             } else {
                 ApiResponse response = new ApiResponse("User not found", false);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -147,6 +146,11 @@ public class FriendController {
     // POST Function to accept or reject a friend request
     @PostMapping("/requests")
     public ResponseEntity<ApiResponse> handleRequest(@RequestBody HandleRequestBody request) {
+        // return the request.status;
+        if (request.getStatus() != null) {
+            ApiResponse response = new ApiResponse("Status is " + request.getStatus(), false);
+            return ResponseEntity.badRequest().body(response);
+        }
         try {
             if (null == request.getStatus()) {
                 ApiResponse response = new ApiResponse(
@@ -154,7 +158,9 @@ public class FriendController {
                         false
                 );
                 return ResponseEntity.badRequest().body(response);
-            } else switch (request.getStatus()) {
+            } else
+            switch (request.getStatus()) {
+                
                 case "accepted" -> {
                     // Accept the friend request
                     FriendRequest friendRequest = friendRequestService.acceptFriendRequest(request.getRequestId());
