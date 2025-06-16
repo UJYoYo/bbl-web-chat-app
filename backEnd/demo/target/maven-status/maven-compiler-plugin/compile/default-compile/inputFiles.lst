@@ -1,5 +1,12 @@
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/App.java
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/FriendController.java
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/HomeController.java
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/MessageController.java
-/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/entity/User.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/App.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/FriendController.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/HomeController.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/MessageController.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/dto/ApiResponse.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/enableCors.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/entity/FriendRequest.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/entity/User.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/repository/FriendRequestRepository.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/repository/UserRepository.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/service/FriendRequestService.java
+/home/shane/bbl/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/service/UserService.java

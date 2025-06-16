@@ -101,18 +101,26 @@ public class FriendRequestService {
     // Delete/Cancel a friend request
     public void cancelFriendRequest(Integer requestId, Integer userId) {
         Optional<FriendRequest> optionalRequest = friendRequestRepository.findById(requestId);
-        
+
         if (!optionalRequest.isPresent()) {
             throw new RuntimeException("Friend request not found");
         }
-        
+
         FriendRequest friendRequest = optionalRequest.get();
-        
+
         // Only sender can cancel their own request
         if (!friendRequest.getSenderId().equals(userId)) {
             throw new RuntimeException("You can only cancel your own friend requests");
         }
-        
+
         friendRequestRepository.delete(friendRequest);
+    }
+    
+    // Get accepted friends for a user
+    public List<FriendRequest> getAcceptedFriends(Integer userId) {
+        List<FriendRequest> sentRequests = friendRequestRepository.findBySenderIdAndStatus(userId, "accepted");
+        List<FriendRequest> receivedRequests = friendRequestRepository.findByRecipientIdAndStatus(userId, "accepted");
+        sentRequests.addAll(receivedRequests);
+        return sentRequests;
     }
 }

@@ -1,5 +1,6 @@
 package com.web_chat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import com.web_chat.entity.FriendRequest;
 import com.web_chat.entity.User;
 import com.web_chat.service.FriendRequestService;
 import com.web_chat.service.UserService;
-
 @RestController
 @RequestMapping("/friends")
 public class FriendController {
@@ -33,16 +33,46 @@ public class FriendController {
         private String recipientUsername;
         private String senderUsername;
         private String status;
-        
-        public SendRequestBody() {}
-        
+
+        public SendRequestBody() {
+        }
+
         // Getters and setters
-        public String getRecipientUsername() { return recipientUsername; }
-        public void setRecipientUsername(String recipientUsername) { this.recipientUsername = recipientUsername; }
-        public String getSenderUsername() { return senderUsername; }
-        public void setSenderUsername(String senderUsername) { this.senderUsername = senderUsername; }
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
+        public String getRecipientUsername() {
+            return recipientUsername;
+        }
+
+        public void setRecipientUsername(String recipientUsername) {
+            this.recipientUsername = recipientUsername;
+        }
+
+        public String getSenderUsername() {
+            return senderUsername;
+        }
+
+        public void setSenderUsername(String senderUsername) {
+            this.senderUsername = senderUsername;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+    }
+    
+    public static class FriendBody {
+        private Integer userId;
+        private String username;
+
+        public FriendBody() {}
+
+        public Integer getUserId() { return userId; }
+        public void setUserId(Integer userId) { this.userId = userId; }
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
     }
     
     public static class HandleRequestBody {
@@ -65,8 +95,7 @@ public class FriendController {
             User user = userService.findByUsername(username);
             
             if (user != null) {
-                return ResponseEntity.ok(new Object() {
-                });
+                return ResponseEntity.ok(user);
             } else {
                 ApiResponse response = new ApiResponse("User not found", false);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -119,28 +148,7 @@ public class FriendController {
         }
     }
 
-    // Function to get all friend requests for a user
-    // /friends/getRequests?username=john
-    @GetMapping("/getPendingRequests")
-    public ResponseEntity<?> getRequests(@RequestParam("username") String username) {
-        try {
-            User user = userService.findByUsername(username);
-            
-            if (user == null) {
-                ApiResponse response = new ApiResponse("User not found", false);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-            
-            // Get all friend requests for this user (both sent and received)
-            List<FriendRequest> allRequests = friendRequestService.getAllRequestsForUser(user.getUserId());
-            
-            return ResponseEntity.ok(allRequests);
-            
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse("Error retrieving friend requests: " + e.getMessage(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
+
     
     // Get only pending requests received by a user
     @GetMapping("/getPendingRequests")
@@ -172,48 +180,87 @@ public class FriendController {
             if (null == request.getStatus()) {
                 ApiResponse response = new ApiResponse(
                         "Invalid status. Use 'accepted' or 'rejected'",
-                        false
-                );
+                        false);
                 return ResponseEntity.badRequest().body(response);
-            } else switch (request.getStatus()) {
-                case "accepted" -> {
-                    // Accept the friend request
-                    FriendRequest friendRequest = friendRequestService.acceptFriendRequest(request.getRequestId());
-                    
-                    ApiResponse response = new ApiResponse(
-                            "Friend request accepted!",
-                            true,
-                            friendRequest.getRequestId()
-                    );
-                    return ResponseEntity.ok(response);
-                    
+            } else
+                switch (request.getStatus()) {
+
+                    case "accepted" -> {
+                        // Accept the friend request
+                        FriendRequest friendRequest = friendRequestService.acceptFriendRequest(request.getRequestId());
+
+                        ApiResponse response = new ApiResponse(
+                                "Friend request accepted!",
+                                true,
+                                friendRequest.getRequestId());
+                        return ResponseEntity.ok(response);
+
+                    }
+                    case "rejected" -> {
+                        // Reject the friend request
+                        FriendRequest friendRequest = friendRequestService.rejectFriendRequest(request.getRequestId());
+
+                        ApiResponse response = new ApiResponse(
+                                "Friend request rejected!",
+                                true,
+                                friendRequest.getRequestId());
+                        return ResponseEntity.ok(response);
+
+                    }
+                    default -> {
+                        ApiResponse response = new ApiResponse(
+                                "Invalid status. Use 'accepted' or 'rejected'",
+                                false);
+                        return ResponseEntity.badRequest().body(response);
+                    }
                 }
-                case "rejected" -> {
-                    // Reject the friend request
-                    FriendRequest friendRequest = friendRequestService.rejectFriendRequest(request.getRequestId());
-                    
-                    ApiResponse response = new ApiResponse(
-                            "Friend request rejected!",
-                            true,
-                            friendRequest.getRequestId()
-                    );
-                    return ResponseEntity.ok(response);
-                    
-                }
-                default -> {
-                    ApiResponse response = new ApiResponse(
-                            "Invalid status. Use 'accepted' or 'rejected'",
-                            false
-                    );
-                    return ResponseEntity.badRequest().body(response);
-                }
-            }
-            
+
         } catch (RuntimeException e) {
             ApiResponse response = new ApiResponse(e.getMessage(), false);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (Exception e) {
             ApiResponse response = new ApiResponse("Failed to handle friend request: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    
+    // Function to get all friends of a user
+    @GetMapping("/getFriends")
+    public ResponseEntity<?> getFriends(@RequestParam("username") String username) {
+        try {
+            User user = userService.findByUsername(username);
+
+            if (user == null) {
+                ApiResponse response = new ApiResponse("User not found", false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // Get all friends of the user
+            List<FriendRequest> requestRequests = friendRequestService.getAcceptedFriends(user.getUserId());
+            List<FriendBody> friends = new ArrayList<>();
+            User tempUser;
+            FriendBody temp;
+
+            // Loop through the friends list checking if the recipient is the user
+            for (FriendRequest requests : requestRequests) {
+                if (requests.getRecipientId().equals(user.getUserId())) {
+                    // Find username of the sender
+                    tempUser = userService.findByUserId((requests.getSenderId()));
+                } else {
+                    tempUser = userService.findByUserId((requests.getRecipientId()));
+                }
+                // Create a FriendBody object for the friend
+                temp = new FriendBody();
+                temp.setUserId(tempUser.getUserId());
+                temp.setUsername(tempUser.getUsername());
+                // Add the friend to the list
+                friends.add(temp);
+            }
+
+            return ResponseEntity.ok(friends);
+
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Error retrieving friends: " + e.getMessage(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
