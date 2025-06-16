@@ -33,16 +33,46 @@ public class FriendController {
         private String recipientUsername;
         private String senderUsername;
         private String status;
-        
-        public SendRequestBody() {}
-        
+
+        public SendRequestBody() {
+        }
+
         // Getters and setters
-        public String getRecipientUsername() { return recipientUsername; }
-        public void setRecipientUsername(String recipientUsername) { this.recipientUsername = recipientUsername; }
-        public String getSenderUsername() { return senderUsername; }
-        public void setSenderUsername(String senderUsername) { this.senderUsername = senderUsername; }
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
+        public String getRecipientUsername() {
+            return recipientUsername;
+        }
+
+        public void setRecipientUsername(String recipientUsername) {
+            this.recipientUsername = recipientUsername;
+        }
+
+        public String getSenderUsername() {
+            return senderUsername;
+        }
+
+        public void setSenderUsername(String senderUsername) {
+            this.senderUsername = senderUsername;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+    }
+    
+    public static class FriendBody {
+        private Integer userId;
+        private String username;
+
+        public FriendBody() {}
+
+        public Integer getUserId() { return userId; }
+        public void setUserId(Integer userId) { this.userId = userId; }
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
     }
     
     public static class HandleRequestBody {
@@ -207,17 +237,23 @@ public class FriendController {
 
             // Get all friends of the user
             List<FriendRequest> requestRequests = friendRequestService.getAcceptedFriends(user.getUserId());
-            List<User> friends = new ArrayList<>();
-            User temp;
+            List<FriendBody> friends = new ArrayList<>();
+            User tempUser;
+            FriendBody temp;
 
             // Loop through the friends list checking if the recipient is the user
             for (FriendRequest requests : requestRequests) {
                 if (requests.getRecipientId().equals(user.getUserId())) {
                     // Find username of the sender
-                    temp = userService.findByUserId((requests.getSenderId()));
+                    tempUser = userService.findByUserId((requests.getSenderId()));
                 } else {
-                    temp = userService.findByUserId((requests.getRecipientId()));
+                    tempUser = userService.findByUserId((requests.getRecipientId()));
                 }
+                // Create a FriendBody object for the friend
+                temp = new FriendBody();
+                temp.setUserId(tempUser.getUserId());
+                temp.setUsername(tempUser.getUsername());
+                // Add the friend to the list
                 friends.add(temp);
             }
 
