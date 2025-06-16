@@ -146,11 +146,6 @@ public class FriendController {
     // POST Function to accept or reject a friend request
     @PostMapping("/requests")
     public ResponseEntity<ApiResponse> handleRequest(@RequestBody HandleRequestBody request) {
-        // return the request.status;
-        if (request.getStatus() != null) {
-            ApiResponse response = new ApiResponse("Status is " + request.getStatus(), false);
-            return ResponseEntity.badRequest().body(response);
-        }
         try {
             if (null == request.getStatus()) {
                 ApiResponse response = new ApiResponse(
