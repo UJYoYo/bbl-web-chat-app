@@ -1,7 +1,15 @@
 package com.web_chat.entity;
 
-import jakarta.persistence.*;
 import java.util.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "message") 
@@ -9,7 +17,8 @@ public class MessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "messageID") 
+    private Integer messageId; 
 
     @Column(name = "senderID") 
     private Integer senderId;  
@@ -21,18 +30,19 @@ public class MessageEntity {
     private String content;
 
     @Column(name = "roomID") 
-    private Integer roomId;  
+    private Integer roomId;
+      
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Long getMessageId() {
+        return messageId != null ? messageId.longValue() : null;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Integer messageId) {
+        this.messageId = messageId;
     }
 
     public Integer getSenderId() {
