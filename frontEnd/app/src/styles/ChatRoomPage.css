@@ -1,0 +1,21 @@
+.background-container {
+    background-color: #1a1a1a;
+    border-color: aliceblue;
+    height: 100vh;
+}
+
+.hi {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.title {
+    background-color: green;
+    height: 50px;
+}
+
+.chat-area {
+    background-color: red;
+    height: 50px;
+}

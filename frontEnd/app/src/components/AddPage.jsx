@@ -10,14 +10,25 @@ function AddPage() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    //toast notification
+    const [showNotif, setShowNotif] = useState(false);
+
     const mockUsers = [
-        { id: 1, username: 'salapao' },
-        { id: 2, username: 'bp' },
-        { id: 3, username: 'shane' },
-        { id: 4, username: 'baobao' },
-        { id: 5, username: 'krungnumpao', },
-        { id: 6, username: 'baobaochicken' }
+        { id: 1, username: 'Salapao' },
+        { id: 2, username: 'Bp' },
+        { id: 3, username: 'Shane' },
+        { id: 4, username: 'Baobao' },
+        { id: 5, username: 'Krungnumpao', },
+        { id: 6, username: 'Baobaochicken' }
     ];
+    //handle show notification after request is sent
+    const handleShowNotif = () => {
+        setShowNotif(true);
+
+        setTimeout(() => {
+            setShowNotif(false);
+        }, 1000)
+    }
     //handle search = recieve search input and get from database
     const handleSearch = (e) => {
         e.preventDefault();
@@ -31,7 +42,7 @@ function AddPage() {
             const results = mockUsers.filter(user => user.username.toLowerCase().includes(searchQuery.toLowerCase()))
             setResultList(results);
             setIsLoading(false);
-        }, 1000);
+        }, 2000);
 
     };
 
@@ -40,12 +51,13 @@ function AddPage() {
         console.log(`Sending friend request to ${user.username}`);
 
         handleCloseModal();
+        handleShowNotif();
     }
 
     const handleInputChange = (e) => {
         setSearchQuery(e.target.value);
         setSearched(false);
-        setResultList('');
+        setResultList([]);
     }
 
     const handleShowModal = (user) => {
@@ -60,7 +72,7 @@ function AddPage() {
     return (
         <div>
             <div className="search-container">
-                <p>Find your friends...if you have them</p>
+                <p>Damn, you have friends?</p>
                 <form onSubmit={handleSearch}>
                     <input
                         type="text"
@@ -83,27 +95,27 @@ function AddPage() {
                     </div>
                 )}
                 {searched && resultList.length > 0 && (resultList.map((user) => (
-                    <div className="friendList"
+                    <div
+                        className={`friendList ${requestList.includes(user.id) ? 'disabled' : ''}`}
                         key={user.id}
-                        onClick={() => handleShowModal(user)}
+                        onClick={requestList.includes(user.id) ? undefined : () => handleShowModal(user)}
+                        style={{
+                            cursor: requestList.includes(user.id) ? 'not-allowed' : 'pointer',
+                            opacity: requestList.includes(user.id) ? 0.7 : 1
+                        }}
                     >{user.username}
-                        {requestList.includes(user.id) && console.log(user.id)}
+                        {requestList.includes(user.id) && showNotif && (
+                            <div className="notification-container">
+                                {`Request sent to ${user.username}!`}
+                            </div>
+                        )}
                     </div>
                 )))}
             </div>
 
             {showModal && selectedUser && (
-                <div className="modal-container" style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'black',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
+                < div className="modal-container">
+                    {/* {console.log(user.username)} */}
                     <p>You want to add this person?</p>
                     <div className="button-container">
                         <button
@@ -114,7 +126,10 @@ function AddPage() {
                         >Cancel</button>
                     </div>
                 </div>
-            )}
+            )
+            }
+
+            {/* {{ showModal }} */}
         </div >
         //form
 

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 import '../styles/Register.css';
 
 function Register() {
+  console.log('🔍 Register rendering...');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ function Register() {
     console.log('password:', password);
     navigate('/main');
   };
-
   return (
     <>
       <div className="register-container">

@@ -1,0 +1,45 @@
+.desktop-container {
+  display: flex;
+  gap: 1vw;
+  /* Fixed gap instead of viewport-based */
+  width: 100%;
+  /* Full width of parent container */
+  height: calc(100vh - 140px);
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.desktop-list {
+  width: min(400px, 30vw);
+  background-color: rgba(133, 133, 133, 0.22);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+}
+
+.desktop-chat-selected {
+  background-color: rgba(133, 133, 133, 0.22);
+  border-radius: 10px;
+  padding: 1vw;
+  flex: 1;
+}
+
+.desktop-no-chat-selected {
+  flex: 1;
+  background-color: red;
+
+}
+
+p {
+  font-size: 20px;
+}
+
+.room {
+  background-color: #1a1a1a;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}

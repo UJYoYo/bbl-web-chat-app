@@ -1,18 +1,90 @@
-.friendList {
+/* .friendList {
     background-color: #1a1a1a;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
     border-radius: 10px;
     margin-top: 10px;
+    font-weight: bold;
+} */
+
+
+.friendList {
+    background-color: #1a1a1a;
+    padding: 1rem 1rem;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex;
+    /* justify-content: space-between;
+    align-items: center; */
 }
 
+/* Disabled state for sent requests */
+.friendList.disabled {
+    background-color: #2a2a2a;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+
 .modal-container {
-    display: 'flex';
+    display: flex;
     flex-direction: column;
-    align-items: 'center';
-    justify-content: 'center';
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+
 }
 
 .button-container {
-    display: 'flex';
+    display: flex;
     gap: 1em;
+}
+
+.search-container {
+
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+form {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+}
+
+input {
+    /* flex: 3; */
+    width: 500px;
+    padding: 0.5rem;
+    font-size: 20px;
+}
+
+button {
+    font-size: 20px;
+    padding: 0.5rem 1.5rem;
+    background-color: #646cff;
+    color: #ffffff;
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+}
+
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #646cff;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    max-width: 300px;
+    word-wrap: break-word;
 }
