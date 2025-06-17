@@ -11,7 +11,7 @@ import com.web_chat.repository.MessageRepository;
 @Service
 public class ChatService {
     @Autowired
-    private MessageRepository messsageRepository;
+    private MessageRepository messageRepository;
 
     // Get chat history between two users
     public List<MessageEntity> getChatHistory(Integer roomId)
@@ -19,7 +19,7 @@ public class ChatService {
         if (roomId == null) {
             throw new IllegalArgumentException("Room ID cannot be null");
         }
-        List<MessageEntity> messages = messsageRepository.findByRoomId(roomId);
+        List<MessageEntity> messages = messageRepository.findByRoomId(roomId);
 
         if (messages.isEmpty()) {
             throw new RuntimeException("No messages found for the given room ID");
