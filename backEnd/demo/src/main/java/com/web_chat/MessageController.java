@@ -1,8 +1,12 @@
 package com.web_chat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,18 +15,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web_chat.entity.MessageEntity;
 import com.web_chat.repository.MessageRepository;
 
-@RestController
+@RestController 
 @RequestMapping("/chat")
 public class MessageController {
 
     @Autowired
     private MessageRepository messageRepository;
 
+    // DTO class for sending messages
     public static class ChatMessage {
         private Integer senderId;
         private Integer recipientId;
         private String content;
         private Integer roomId;
+
+        // Default constructor
+        public ChatMessage() {}
+
+        // Constructor
+        public ChatMessage(Integer roomId, Integer senderId, Integer recipientId, String content) {
+            this.roomId = roomId;
+            this.senderId = senderId;
+            this.recipientId = recipientId;
+            this.content = content;
+        }
 
         // Getters and Setters
         public Integer getSenderId() {
@@ -58,27 +74,27 @@ public class MessageController {
         }
     }
 
-    // @MessageMapping("/chat.send")
-    // @SendTo("/topic/public")
-    // public ChatMessage sendMessage(ChatMessage message) {
-    //     // Save message to database
-    //     MessageEntity entity = new MessageEntity();
-    //     entity.setSenderId(message.getSenderId());
-    //     entity.setRecipientId(message.getRecipientId());
-    //     entity.setContent(message.getContent());
-    //     entity.setRoomId(message.getRoomId()); // Changed from String.valueOf() to direct Integer
-    //     entity.setTimestamp(new java.util.Date());
-        
-    //     messageRepository.save(entity);
-        
-    //     return message;
-    // }
-
     @GetMapping("/getHistory")
-    public List<MessageEntity> getChatHistory(@RequestParam("roomId") Integer roomId) {
-        return messageRepository.findByRoomId(roomId);
+    public ResponseEntity<?> getChatHistory(@RequestParam("roomId") Integer roomId) {
+        try {
+            List<MessageEntity> messages = messageRepository.findByRoomId(roomId);
+            
+            // Create response with metadata
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("roomId", roomId);
+            response.put("messageCount", messages.size());
+            response.put("messages", messages);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("error", "Failed to get chat history: " + e.getMessage());
+            errorResponse.put("roomId", roomId);
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
-
-
-    
 }
