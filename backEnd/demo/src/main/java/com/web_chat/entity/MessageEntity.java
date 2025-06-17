@@ -39,14 +39,14 @@ public class MessageEntity {
     }
 
     // Getters and Setters
-    public Long getMessageId() {
-        return messageId != null ? messageId.longValue() : null;
+    public Integer getMessageId() {  
+        return messageId;
     }
 
-    public void setId(Integer messageId) {
+    public void setMessageId(Integer messageId) { 
         this.messageId = messageId;
     }
-
+    
     public Integer getSenderId() {
         return senderId;
     }
