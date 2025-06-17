@@ -1,14 +1,17 @@
 package com.web_chat;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.web_chat.entity.MessageEntity;
 import com.web_chat.repository.MessageRepository;
 
-@Controller
+@RestController
+@RequestMapping("/chat")
 public class MessageController {
 
     @Autowired
@@ -54,26 +57,24 @@ public class MessageController {
         }
     }
 
-    @MessageMapping("/chat.send")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(ChatMessage message) {
-        // Save message to database
-        MessageEntity entity = new MessageEntity();
-        entity.setSenderId(message.getSenderId());
-        entity.setRecipientId(message.getRecipientId());
-        entity.setContent(message.getContent());
-        entity.setRoomId(message.getRoomId()); // Changed from String.valueOf() to direct Integer
-        entity.setTimestamp(new java.util.Date());
+    // @MessageMapping("/chat.send")
+    // @SendTo("/topic/public")
+    // public ChatMessage sendMessage(ChatMessage message) {
+    //     // Save message to database
+    //     MessageEntity entity = new MessageEntity();
+    //     entity.setSenderId(message.getSenderId());
+    //     entity.setRecipientId(message.getRecipientId());
+    //     entity.setContent(message.getContent());
+    //     entity.setRoomId(message.getRoomId()); // Changed from String.valueOf() to direct Integer
+    //     entity.setTimestamp(new java.util.Date());
         
-        messageRepository.save(entity);
+    //     messageRepository.save(entity);
         
-        return message;
-    }
+    //     return message;
+    // }
 
-    @MessageMapping("/chat.history")
-    @SendTo("/topic/history")
-    public List<MessageEntity> getHistory(Integer roomId) { // Changed parameter type from String to Integer
-        // Retrieve actual history from database
-        return messageRepository.findByRoomIdOrderByTimestampAsc(roomId);
+    @GetMapping("/getHistory")
+    public List<MessageEntity> getChatHistory(Integer roomId) {
+        return messageRepository.findByRoomId(roomId);
     }
 }
