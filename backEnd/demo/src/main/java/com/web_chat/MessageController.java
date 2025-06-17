@@ -28,6 +28,7 @@ public class MessageController {
         private Integer recipientId;
         private String content;
         private Integer roomId;
+        private Integer messageId;
 
         // Default constructor
         public ChatMessage() {}
@@ -38,6 +39,15 @@ public class MessageController {
             this.senderId = senderId;
             this.recipientId = recipientId;
             this.content = content;
+
+        }
+
+        public Integer getMessageId() {  
+            return messageId;
+        }
+
+        public void setMessageId(Integer messageId) { 
+            this.messageId = messageId;
         }
 
         // Getters and Setters
@@ -79,14 +89,8 @@ public class MessageController {
         try {
             List<MessageEntity> messages = messageRepository.findByRoomId(roomId);
             
-            // Create response with metadata
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("roomId", roomId);
-            response.put("messageCount", messages.size());
-            response.put("messages", messages);
             
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(messages);
             
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
