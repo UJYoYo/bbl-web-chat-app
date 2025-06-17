@@ -1,15 +1,11 @@
 package com.web_chat.entity;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "message") 
@@ -32,9 +28,15 @@ public class MessageEntity {
     @Column(name = "roomID") 
     private Integer roomId;
       
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
+    // Constructor
+    public MessageEntity() {
+    }
+    public MessageEntity(Integer senderId, Integer recipientId, String content, Integer roomId) {
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.content = content;
+        this.roomId = roomId;
+    }
 
     // Getters and Setters
     public Long getMessageId() {
@@ -77,11 +79,4 @@ public class MessageEntity {
         this.roomId = roomId;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
 }
