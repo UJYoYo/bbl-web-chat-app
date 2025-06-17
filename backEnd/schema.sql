@@ -10,3 +10,4 @@ CREATE TABLE friend_requests (
     status TEXT NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
     UNIQUE(sender_id, recipient_id)
 );
+    

@@ -1,5 +1,11 @@
 package com.web_chat;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,52 +13,255 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web_chat.dto.ApiResponse;
+import com.web_chat.entity.FriendRequest;
+import com.web_chat.entity.User;
+import com.web_chat.service.FriendRequestService;
+import com.web_chat.service.UserService;
 @RestController
 @RequestMapping("/friends")
 public class FriendController {
 
-    public static class sendRequestBody {
-        public String recipientUsername;
-        public String senderUsername;
-        public String status;
+    @Autowired
+    private FriendRequestService friendRequestService;
+    
+    @Autowired
+    private UserService userService;
+
+    // Request body classes
+    public static class SendRequestBody {
+        private String recipientUsername;
+        private String senderUsername;
+        private String status;
+
+        public SendRequestBody() {
+        }
+
+        // Getters and setters
+        public String getRecipientUsername() {
+            return recipientUsername;
+        }
+
+        public void setRecipientUsername(String recipientUsername) {
+            this.recipientUsername = recipientUsername;
+        }
+
+        public String getSenderUsername() {
+            return senderUsername;
+        }
+
+        public void setSenderUsername(String senderUsername) {
+            this.senderUsername = senderUsername;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+    }
+    
+    public static class FriendBody {
+        private Integer userId;
+        private String username;
+
+        public FriendBody() {}
+
+        public Integer getUserId() { return userId; }
+        public void setUserId(Integer userId) { this.userId = userId; }
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+    }
+    
+    public static class HandleRequestBody {
+        private Integer requestId;
+        private String status;
+        
+        public HandleRequestBody() {}
+        
+        public Integer getRequestId() { return requestId; }
+        public void setRequestId(Integer requestId) { this.requestId = requestId; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
     }
 
-    // Funtcions to search for a user in db
+    // Function to search for a user in db
     // /friends/getUser?username=john
     @GetMapping("/getUser")
-    public String getUser(@RequestParam("username") String username) {
-        // search for the user in the database
-        return "Searching for: " + username;
+    public ResponseEntity<?> getUser(@RequestParam("username") String username) {
+        try {
+            User user = userService.findByUsername(username);
+            
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                ApiResponse response = new ApiResponse("User not found", false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Error searching for user: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     // Function to send a friend request after searching for a user
     @PostMapping("/sendRequest")
-    public String sendRequest(@RequestBody sendRequestBody request) {
-        request.status = "pending"; // Set initial status to pending
-        return "Friend request sent to: " + request.recipientUsername 
-               + " from: " + request.senderUsername 
-               + " with status: " + request.status;
+    public ResponseEntity<ApiResponse> sendRequest(@RequestBody SendRequestBody request) {
+        try {
+            // Find sender and recipient by username
+            User sender = userService.findByUsername(request.getSenderUsername());
+            User recipient = userService.findByUsername(request.getRecipientUsername());
+            
+            if (sender == null) {
+                return ResponseEntity.badRequest()
+                    .body(new ApiResponse("Sender username not found", false));
+            }
+            
+            if (recipient == null) {
+                return ResponseEntity.badRequest()
+                    .body(new ApiResponse("Recipient username not found", false));
+            }
+            
+            // Send friend request using the service
+            FriendRequest friendRequest = friendRequestService.sendFriendRequest(
+                sender.getUserId(), 
+                recipient.getUserId()
+            );
+            
+            ApiResponse response = new ApiResponse(
+                "Friend request sent to " + request.getRecipientUsername() + 
+                " from " + request.getSenderUsername(), 
+                true, 
+                friendRequest.getRequestId()
+            );
+            return ResponseEntity.ok(response);
+            
+        } catch (RuntimeException e) {
+            ApiResponse response = new ApiResponse(e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Failed to send friend request: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
-    // Function to get all friend requests for a user
-    // /friends/getRequests?username=john
-    @GetMapping("/getRequests")
-    public String getRequests(@RequestParam("username") String username) {
-        // GET request to retrieve all friend requests for the user
-        return "Retrieving friend requests for: " + username;
+
+    
+    // Get only pending requests received by a user
+    @GetMapping("/getPendingRequests")
+    public ResponseEntity<?> getPendingRequests(@RequestParam("username") String username) {
+        try {
+            User user = userService.findByUsername(username);
+            
+            if (user == null) {
+                ApiResponse response = new ApiResponse("User not found", false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            
+            // Get pending requests that this user received
+            List<FriendRequest> pendingRequests = friendRequestService.getPendingRequestsForUser(user.getUserId());
+            
+            //return pendingRequests;
+            return ResponseEntity.ok(pendingRequests);
+            
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Error retrieving pending requests: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     // POST Function to accept or reject a friend request
     @PostMapping("/requests")
-    public String request(@RequestBody sendRequestBody request) {
-        if (request.status.equals("accepted")) {
-            // Update the status of the friend request in the database
-            return "Friend request accepted.";
-        } else if (request.status.equals("rejected")) {
-            // Delete  friend request in the database
-            return "Friend request rejected.";
-        } else {
-            return "";
+    public ResponseEntity<ApiResponse> handleRequest(@RequestBody HandleRequestBody request) {
+        try {
+            if (null == request.getStatus()) {
+                ApiResponse response = new ApiResponse(
+                        "Invalid status. Use 'accepted' or 'rejected'",
+                        false);
+                return ResponseEntity.badRequest().body(response);
+            } else
+                switch (request.getStatus()) {
+
+                    case "accepted" -> {
+                        // Accept the friend request
+                        FriendRequest friendRequest = friendRequestService.acceptFriendRequest(request.getRequestId());
+
+                        ApiResponse response = new ApiResponse(
+                                "Friend request accepted!",
+                                true,
+                                friendRequest.getRequestId());
+                        return ResponseEntity.ok(response);
+
+                    }
+                    case "rejected" -> {
+                        // Reject the friend request
+                        FriendRequest friendRequest = friendRequestService.rejectFriendRequest(request.getRequestId());
+
+                        ApiResponse response = new ApiResponse(
+                                "Friend request rejected!",
+                                true,
+                                friendRequest.getRequestId());
+                        return ResponseEntity.ok(response);
+
+                    }
+                    default -> {
+                        ApiResponse response = new ApiResponse(
+                                "Invalid status. Use 'accepted' or 'rejected'",
+                                false);
+                        return ResponseEntity.badRequest().body(response);
+                    }
+                }
+
+        } catch (RuntimeException e) {
+            ApiResponse response = new ApiResponse(e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Failed to handle friend request: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    
+    // Function to get all friends of a user
+    @GetMapping("/getFriends")
+    public ResponseEntity<?> getFriends(@RequestParam("username") String username) {
+        try {
+            User user = userService.findByUsername(username);
+
+            if (user == null) {
+                ApiResponse response = new ApiResponse("User not found", false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // Get all friends of the user
+            List<FriendRequest> requestRequests = friendRequestService.getAcceptedFriends(user.getUserId());
+            List<FriendBody> friends = new ArrayList<>();
+            User tempUser;
+            FriendBody temp;
+
+            // Loop through the friends list checking if the recipient is the user
+            for (FriendRequest requests : requestRequests) {
+                if (requests.getRecipientId().equals(user.getUserId())) {
+                    // Find username of the sender
+                    tempUser = userService.findByUserId((requests.getSenderId()));
+                } else {
+                    tempUser = userService.findByUserId((requests.getRecipientId()));
+                }
+                // Create a FriendBody object for the friend
+                temp = new FriendBody();
+                temp.setUserId(tempUser.getUserId());
+                temp.setUsername(tempUser.getUsername());
+                // Add the friend to the list
+                friends.add(temp);
+            }
+
+            return ResponseEntity.ok(friends);
+
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Error retrieving friends: " + e.getMessage(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
     
