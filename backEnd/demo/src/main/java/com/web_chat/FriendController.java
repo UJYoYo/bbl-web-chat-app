@@ -66,11 +66,14 @@ public class FriendController {
     public static class FriendBody {
         private Integer userId;
         private String username;
+        private Integer roomId;
 
         public FriendBody() {}
 
         public Integer getUserId() { return userId; }
+        public Integer getRoomId() { return roomId; }
         public void setUserId(Integer userId) { this.userId = userId; }
+        public void setRoomId(Integer roomId) { this.roomId = roomId; }
         public String getUsername() { return username; }
         public void setUsername(String username) { this.username = username; }
     }
@@ -284,6 +287,7 @@ public class FriendController {
                 temp = new FriendBody();
                 temp.setUserId(tempUser.getUserId());
                 temp.setUsername(tempUser.getUsername());
+                temp.setRoomId(requests.getRequestId()); 
                 // Add the friend to the list
                 friends.add(temp);
             }
