@@ -164,13 +164,34 @@ public class FriendController {
             // Get pending requests that this user received
             List<FriendRequest> pendingRequests = friendRequestService.getPendingRequestsForUser(user.getUserId());
             
-            //return pendingRequests;
-            return ResponseEntity.ok(pendingRequests);
+            List<FriendBody> pendingFriends = new ArrayList<>();
+            User tempUser;
+            FriendBody temp;
+            // Loop through the pending requests
+            for (FriendRequest request : pendingRequests) {
+                // Check if the recipient is the user
+                if (request.getRecipientId().equals(user.getUserId())) {
+                    // Find username of the sender
+                    tempUser = userService.findByUserId(request.getSenderId());
+                } else {
+                    tempUser = userService.findByUserId(request.getRecipientId());
+                }
+                // Create a FriendBody object for the pending friend
+                temp = new FriendBody();
+                temp.setUserId(tempUser.getUserId());
+                temp.setUsername(tempUser.getUsername());
+                // Add the pending friend to the list
+                pendingFriends.add(temp);
+
+                //return pendingRequests;
+                return ResponseEntity.ok(pendingFriends);
+            }
             
         } catch (Exception e) {
             ApiResponse response = new ApiResponse("Error retrieving pending requests: " + e.getMessage(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+        return null;
     }
 
     // POST Function to accept or reject a friend request
