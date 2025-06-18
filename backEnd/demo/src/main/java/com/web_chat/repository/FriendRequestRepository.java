@@ -29,7 +29,5 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, In
     // Check if a friend request already exists between two users
     Optional<FriendRequest> findBySenderIdAndRecipientId(Integer senderId, Integer recipientId);
     
-    // Check if there's any request between two users (either direction)
-    List<FriendRequest> findBySenderIdAndRecipientIdOrRecipientIdAndSenderId(
-        Integer senderId1, Integer recipientId1, Integer senderId2, Integer recipientId2);
+
 }
