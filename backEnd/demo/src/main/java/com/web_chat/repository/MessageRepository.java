@@ -10,4 +10,5 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
 
     // Find messages by room ID
     List<MessageEntity> findByRoomId(Integer roomId); 
+    
 }
