@@ -76,13 +76,14 @@ public class FriendController {
     }
     
     public static class HandleRequestBody {
-        private Integer requestId;
+        private Integer senderId;
+        private Integer recipientId;
         private String status;
         
         public HandleRequestBody() {}
         
-        public Integer getRequestId() { return requestId; }
-        public void setRequestId(Integer requestId) { this.requestId = requestId; }
+        public Integer getSenderId() { return senderId; }
+        public Integer getRecipientId() { return recipientId; }
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
     }
@@ -205,11 +206,15 @@ public class FriendController {
                 return ResponseEntity.badRequest().body(response);
             } else
                 switch (request.getStatus()) {
-
                     case "accepted" -> {
+                        // Convert HandleRequestBody to FriendRequest
+                        FriendRequest temp = new FriendRequest();
+                        temp.setSenderId(request.getSenderId());
+                        temp.setRecipientId(request.getRecipientId());
+                        temp.setStatus("accepted");
                         // Accept the friend request
-                        FriendRequest friendRequest = friendRequestService.acceptFriendRequest(request.getRequestId());
-
+                        FriendRequest friendRequest = friendRequestService.acceptFriendRequest(temp);
+                        
                         ApiResponse response = new ApiResponse(
                                 "Friend request accepted!",
                                 true,
@@ -218,8 +223,13 @@ public class FriendController {
 
                     }
                     case "rejected" -> {
+                        // Convert HandleRequestBody to FriendRequest
+                        FriendRequest temp = new FriendRequest();
+                        temp.setSenderId(request.getSenderId());
+                        temp.setRecipientId(request.getRecipientId());
+                        temp.setStatus("rejected");
                         // Reject the friend request
-                        FriendRequest friendRequest = friendRequestService.rejectFriendRequest(request.getRequestId());
+                        FriendRequest friendRequest = friendRequestService.rejectFriendRequest(temp);
 
                         ApiResponse response = new ApiResponse(
                                 "Friend request rejected!",

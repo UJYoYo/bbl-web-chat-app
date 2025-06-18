@@ -44,7 +44,8 @@ public class FriendRequestService {
     }
     
     // Accept a friend request
-    public FriendRequest acceptFriendRequest(Integer requestId) {
+    public FriendRequest acceptFriendRequest(FriendRequest request) {
+        Integer requestId = friendRequestRepository.findBySenderIdAndRecipientId(request.getSenderId(), request.getRecipientId()).get().getSenderId();
         Optional<FriendRequest> optionalRequest = friendRequestRepository.findById(requestId);
         
         if (!optionalRequest.isPresent()) {
@@ -62,7 +63,8 @@ public class FriendRequestService {
     }
     
     // Reject a friend request
-    public FriendRequest rejectFriendRequest(Integer requestId) {
+    public FriendRequest rejectFriendRequest(FriendRequest request) {
+        Integer requestId = friendRequestRepository.findBySenderIdAndRecipientId(request.getSenderId(), request.getRecipientId()).get().getSenderId();
         Optional<FriendRequest> optionalRequest = friendRequestRepository.findById(requestId);
         
         if (!optionalRequest.isPresent()) {
