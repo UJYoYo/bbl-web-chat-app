@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { friendsAPI } from './Api.jsx';
 import "../styles/AddPage.css"
 
 function AddPage() {
@@ -12,15 +13,8 @@ function AddPage() {
 
     //toast notification
     const [showNotif, setShowNotif] = useState(false);
+    const current_username = localStorage.getItem("username");
 
-    const mockUsers = [
-        { id: 1, username: 'Salapao' },
-        { id: 2, username: 'Bp' },
-        { id: 3, username: 'Shane' },
-        { id: 4, username: 'Baobao' },
-        { id: 5, username: 'Krungnumpao', },
-        { id: 6, username: 'Baobaochicken' }
-    ];
     //handle show notification after request is sent
     const handleShowNotif = () => {
         setShowNotif(true);
@@ -30,26 +24,52 @@ function AddPage() {
         }, 1000)
     }
     //handle search = recieve search input and get from database
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
-        console.log(searchQuery.trim());
-        if (searchQuery.trim().length === 0)
+        const tmp_searchQuery = searchQuery.trim();
+        // console.log(tmp_searchQuery);
+        if (tmp_searchQuery.length === 0)
             return;
         setSearched(true);
         setIsLoading(true);
 
-        setTimeout(() => {
-            const results = mockUsers.filter(user => user.username.toLowerCase().includes(searchQuery.toLowerCase()))
-            setResultList(results);
+        try {
+            const userList = await friendsAPI.getUsers(tmp_searchQuery);
+            let userArray;
+            if (Array.isArray(userList)) {
+                userArray = userList;
+            } else if (userList && typeof userList === 'object') {
+                userArray = [userList];  // Wrap single object in array
+            } else {
+                userArray = [];
+            }
+            setResultList(userArray);
+        } catch (e) {
+            console.log("error: ", e);
+            setResultList([]);
+        } finally {
             setIsLoading(false);
-        }, 2000);
-
+        }
     };
 
-    const handleRequestList = (user) => {
-        setRequestList([...requestList, user.id]);
-        console.log(`Sending friend request to ${user.username}`);
+    useEffect(() => {
+        console.log('🔄 ResultList updated:', resultList);
+        console.log('🔄 ResultList length:', resultList.length);
+    }, [resultList]);
 
+
+    const handleRequestList = async (recipientUser) => {
+        try {
+            const request = await friendsAPI.sendRequests(current_username, recipientUser.username);
+            console.log(request);
+            if (request) {
+                setRequestList([...requestList, recipientUser.id]);
+                console.log(`Sending friend request to ${requestList}`);
+            }
+        } catch (e) {
+            console.log("Error request list", e);
+        }
+        console.log("requestlist", requestList);
         handleCloseModal();
         handleShowNotif();
     }
@@ -97,7 +117,7 @@ function AddPage() {
                 {searched && resultList.length > 0 && (resultList.map((user) => (
                     <div
                         className={`friendList ${requestList.includes(user.id) ? 'disabled' : ''}`}
-                        key={user.id}
+                        key={user.userId}
                         onClick={requestList.includes(user.id) ? undefined : () => handleShowModal(user)}
                         style={{
                             cursor: requestList.includes(user.id) ? 'not-allowed' : 'pointer',

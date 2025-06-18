@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom';
+import { userAPI } from './Api.jsx';
 import '../styles/Register.css';
 
 function Register() {
@@ -9,12 +9,26 @@ function Register() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     console.log('username:', username);
     console.log('password:', password);
-    navigate('/main');
+    try {
+      const data = await userAPI.register(username, password);
+      if (data) {
+        console.log('Registration', data.userId);
+        localStorage.setItem('username', username.trim());
+        localStorage.setItem('userId', data.userId);
+      }
+      setTimeout(() => {
+        navigate('/main');
+      }, 1000);
+    } catch (error) {
+      // Error handling is already done in the centralized API
+      console.error('Registration failed:', error.message);
+    }
   };
+
   return (
     <>
       <div className="register-container">
