@@ -13,20 +13,22 @@ public class MessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "messageID") 
-    private Integer messageId; 
+    @Column(name = "message_id") 
+    private Integer messageId;
 
-    @Column(name = "senderID") 
+    @Column(name = "room_id") 
+    private Integer roomId;
+
+    @Column(name = "sender_id") 
     private Integer senderId;  
 
-    @Column(name = "recipientID") 
+    @Column(name = "recipient_id") 
     private Integer recipientId; 
 
     @Column(name = "message") 
     private String content;
 
-    @Column(name = "roomID") 
-    private Integer roomId;
+    
       
     // Constructor
     public MessageEntity() {
