@@ -119,9 +119,10 @@ public class MessageController {
             temp.setContent(chatMessage.getContent());
 
 
-            MessageEntity savedMessage = messageService.sendMessage(
-                temp
-            );
+            // MessageEntity savedMessage = messageService.sendMessage(
+            //     temp
+            // );
+            MessageEntity savedMessage = messageService.sendMessageWithBroadcast(temp);
             
             // Convert entity to DTO for response
             ChatMessage responseMessage = new ChatMessage(

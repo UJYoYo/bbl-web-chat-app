@@ -1,7 +1,9 @@
 package com.web_chat;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -111,7 +113,7 @@ public class WebSocketController {
                 responseMessage
             );
             
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             System.err.println("Error sending message via WebSocket: " + e.getMessage());
             // Optionally, you could send an error message back to the sender
         }
