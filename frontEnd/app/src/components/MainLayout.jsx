@@ -10,6 +10,7 @@ function MainLayout() {
   // console.log(isMobile);
   // console.log(location.pathname);
   useEffect(() => {
+    console.log("username:", localStorage.getItem('username'));
     const handleResize = () => {
       // console.log(chatOnMobile);
       console.log(window.innerWidth);
@@ -20,7 +21,7 @@ function MainLayout() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  });
+  }, []);
 
   return (
     <div className="chat-layout">

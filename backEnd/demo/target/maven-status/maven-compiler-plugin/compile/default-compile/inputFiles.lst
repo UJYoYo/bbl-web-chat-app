@@ -12,4 +12,5 @@
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/repository/MessageRepository.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/repository/UserRepository.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/service/FriendRequestService.java
+/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/service/MessageService.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/service/UserService.java

@@ -5,43 +5,37 @@ nope, we'll combine both the list and chat room into one since the style will be
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { friendsAPI } from './Api.jsx';
 import ChatRoom from './ChatRoom.jsx';
 import '../styles/ChatPage.css'
 
 function ResponsiveChatPage() {
     const { roomId } = useParams();
-    const [selectedRoom, setSelectedRoom] = useState(roomId || null);
+    const [selectedRoom, setSelectedRoom] = useState('' || null);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
     const [message, setMessage] = useState('');
+    const [chatRooms, setChatRooms] = useState([]);
+    const current_username = localStorage.getItem("username");
+
     const navigate = useNavigate();
-
-    const [messages, setMessages] = useState({
-        'Salapao': [
-            { id: 1, text: "Hey! How are you?", sender: "Salapao", timestamp: "10:30 AM" },
-            { id: 2, text: "I'm doing great! How about you?", sender: "me", timestamp: "10:32 AM" },
-            { id: 3, text: "Pretty good! Want to hang out later?", sender: "Salapao", timestamp: "10:35 AM" },
-            { id: 4, text: "Sure! What time works for you?", sender: "me", timestamp: "10:36 AM" },
-        ],
-        'Bao': [
-            { id: 1, text: "What's up!", sender: "Bao", timestamp: "9:15 AM" },
-            { id: 2, text: "Not much, just working. You?", sender: "me", timestamp: "9:20 AM" },
-        ],
-        'Pao': [
-            { id: 1, text: "Did you see the game last night?", sender: "Pao", timestamp: "8:45 AM" },
-        ]
-    });
-
-    const ChatRooms = [
-        { id: 1, roomId: 'Salapao', lastMessage: 'Sure! What time works for you?', time: '10:36 AM' },
-        { id: 2, roomId: 'Bao', lastMessage: 'Not much, just working. You?', time: '9:20 AM' },
-        { id: 3, roomId: 'Pao', lastMessage: 'Did you see the game last night?', time: '8:45 AM' }
-    ];
 
     console.log('Current URL:', window.location.pathname);
     console.log('roomId from useParams():', roomId);
     console.log('Type of roomId:', typeof roomId);
+    console.log(chatRooms);
 
+    const loadFriends = async () => {
+        try {
+            const friendsList = await friendsAPI.getFriends(current_username);
+            console.log("friend", friendsList);
+            setChatRooms(friendsList || []);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+
+    }
     useEffect(() => {
+        loadFriends();
         const handleResize = () => {
             setIsMobile(window.innerWidth < 700);
         };
@@ -49,12 +43,16 @@ function ResponsiveChatPage() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, []); //[] why brackets
+    }, []); //[] why bracket
 
-    const selectRoom = (roomId) => {
-        setSelectedRoom(roomId);
+    const selectRoom = (roomId, username) => {
+        setSelectedRoom(username);
         navigate(`/main/chats/${roomId}`);
     }
+
+    useEffect(() => {
+        console.log("select", selectedRoom);
+    }, [selectedRoom]);
 
     // const historyMessages = selectedRoom ? messages[selectedRoom] || [] : [];
 
@@ -69,9 +67,9 @@ function ResponsiveChatPage() {
         else {
             return (
                 <div className="mobile-chat-list">
-                    <p>You have {ChatRooms.length} friends</p>
+                    <p>You have {chatRooms.length} friends</p>
                     <div className="roomList">
-                        {ChatRooms.map((room) =>
+                        {chatRooms.map((room) =>
                             <div className="room"
                                 key={room.id}
                                 onClick={() => selectRoom(room.roomId)}
@@ -86,21 +84,24 @@ function ResponsiveChatPage() {
     return (
         <div className="desktop-container">
             <div className="desktop-list">
-                <p>You have {ChatRooms.length} friends</p>
-                {ChatRooms.map((room) =>
+                <p>You have {chatRooms.length} friends</p>
+                {chatRooms.map((room) =>
                     <div className="room"
-                        key={room.id}
-                        onClick={() => selectRoom(room.roomId)}
-                    >{room.roomId}</div>
+                        key={room.roomId}
+                        onClick={() => selectRoom(room.roomId, room.username)}
+                    >{room.username}</div>
                 )}
             </div>
-            {selectedRoom &&
-                <ChatRoom roomId={roomId} />
-            }
+            {selectedRoom && (
+                <div className="desktop-chat-selected">
+                    <ChatRoom roomId={roomId} friendUsername={selectedRoom} />
+                </div>
+            )}
             {selectedRoom == null && (
                 <div className="desktop-no-chat-selected">
                     <h3>Select a chat to start messaging</h3>
                     <p>Choose from your conversations on the left</p>
+
                 </div>
             )}
         </div>
