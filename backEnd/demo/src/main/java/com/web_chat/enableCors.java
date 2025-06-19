@@ -1,20 +1,37 @@
-package com.web_chat; // Replace with your actual package
+package com.web_chat;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebMvc
-public class enableCors implements WebMvcConfigurer {
+public class enableCors {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Apply to all endpoints
-                .allowedOrigins("*") // Allow all origins
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(false); // Must be false when using allowedOrigins("*")
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+
+        // For development - allow all origins
+        // In production, specify your frontend domain
+        config.addAllowedOriginPattern("*");
+
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        // WebSocket specific headers
+        config.addExposedHeader("Upgrade");
+        config.addExposedHeader("Connection");
+        config.addExposedHeader("Sec-WebSocket-Accept");
+        config.addExposedHeader("Sec-WebSocket-Key");
+        config.addExposedHeader("Sec-WebSocket-Version");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
 }
