@@ -1,11 +1,14 @@
 com/web_chat/service/UserService.class
 com/web_chat/FriendController$SendRequestBody.class
+com/web_chat/WebSocketController$ChatMessage.class
 com/web_chat/repository/MessageRepository.class
 com/web_chat/entity/MessageEntity.class
 com/web_chat/App.class
 com/web_chat/repository/UserRepository.class
+com/web_chat/service/MessageService.class
 com/web_chat/service/FriendRequestService.class
 com/web_chat/repository/FriendRequestRepository.class
+com/web_chat/WebSocketController.class
 com/web_chat/enableCors.class
 com/web_chat/entity/User.class
 com/web_chat/entity/FriendRequest.class

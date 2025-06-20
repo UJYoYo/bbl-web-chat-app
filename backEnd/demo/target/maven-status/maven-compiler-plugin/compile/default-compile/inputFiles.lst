@@ -2,6 +2,7 @@
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/FriendController.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/HomeController.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/MessageController.java
+/home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/WebSocketController.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/config/WebSocketConfig.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/dto/ApiResponse.java
 /home/non/Documents/Code/BLL/Web-Chat/bbl-web-chat-app/backEnd/demo/src/main/java/com/web_chat/enableCors.java
