@@ -187,15 +187,14 @@ public class FriendController {
                 // Add the pending friend to the list
                 pendingFriends.add(temp);
 
-                //return pendingRequests;
-                return ResponseEntity.ok(pendingFriends);
             }
+            //return pendingRequests;
+            return ResponseEntity.ok(pendingFriends);
             
         } catch (Exception e) {
             ApiResponse response = new ApiResponse("Error retrieving pending requests: " + e.getMessage(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-        return null;
     }
 
     // POST Function to accept or reject a friend request
