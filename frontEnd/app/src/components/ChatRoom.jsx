@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { messageAPI } from './Api.jsx';
+import '../styles/ChatRoom.css';
+
 function ChatRoom({ roomId, friendUsername }) {
     const [history, setHistory] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -27,7 +29,7 @@ function ChatRoom({ roomId, friendUsername }) {
     }, [roomId]);
 
     const handleSendMessage = (newMessage) => {
-        
+
     }
     return (
         < div className="chat-container">

@@ -46,11 +46,9 @@
 }
 
 .search-container {
-
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1em;
 }
 
 form {
@@ -66,13 +64,13 @@ input {
     font-size: 20px;
 }
 
-button {
+.search-button {
     font-size: 20px;
-    padding: 0.5rem 1.5rem;
+    padding: 1rem 1.5rem;
     background-color: #646cff;
     color: #ffffff;
     transition: color 0.2s ease, background-color 0.2s ease;
-
+    font-weight: 100;
 }
 
 
@@ -87,4 +85,89 @@ button {
     font-weight: 500;
     max-width: 300px;
     word-wrap: break-word;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 700px) {
+    form {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+        width: 100% !important;
+        align-items: stretch !important;
+        /* Remove any potential padding/margin issues */
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Force input to exact width */
+    input {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        padding: 0.75rem !important;
+        font-size: 1rem !important;
+        box-sizing: border-box !important;
+        /* Remove any margin that might affect width */
+        margin: 0 !important;
+        border: 2px solid #444 !important;
+        border-radius: 8px !important;
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+
+    /* Force button to exact same width as input */
+    button[type="submit"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        padding: 0.75rem !important;
+        font-size: 1rem !important;
+        box-sizing: border-box !important;
+        /* Remove any margin that might affect width */
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        background-color: #646cff !important;
+        color: #ffffff !important;
+        /* Override any inherited flex properties */
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+
+    /* Also target button without type attribute */
+    form button {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        padding: 0.75rem !important;
+        font-size: 0.95rem !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 8px !important;
+        background-color: #646cff !important;
+        color: #ffffff !important;
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
+    }
+
+    /* Ensure search container doesn't interfere */
+    .search-container {
+        width: 100% !important;
+        padding: 0 !important;
+        margin-bottom: 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    p {
+        font-size: 10px;
+    }
 }

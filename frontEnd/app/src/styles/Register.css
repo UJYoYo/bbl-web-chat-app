@@ -1,40 +1,221 @@
+/* Fixed Register.css - Mobile-Friendly Layout */
+
 .register-container {
   min-height: 100vh;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  /* Ensure it works on all screen sizes */
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 h1 {
-  font-size: 90px;
-  margin-bottom: 20px;
+  font-size: clamp(4rem, 8vw, 5.5rem);
+  /* Responsive font size */
+  margin-bottom: 2rem;
   color: #646cff;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.1;
 }
-
-label {
-  font-size: 25px;
-  width: 140px;
-  /* Fix width so everything lines up */
-  text-align: right;
-}
-
 
 .form {
+  width: 100%;
+  max-width: 400px;
+  /* Prevent form from getting too wide */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  align-items: center;
+  gap: 1.5rem;
+  align-items: stretch;
+  /* Make form items fill width */
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .form-row {
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  /* Stack label and input vertically on mobile */
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+label {
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-align: left;
+  /* Left align labels */
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  box-sizing: border-box;
+
+  /* Prevent zoom on iOS */
+  font-size: 16px;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .button-container {
-  margin-top: 30px;
+  width: 100%;
+  padding-top: 1rem;
   display: flex;
   justify-content: center;
+}
+
+.button-container button {
+  padding: 1rem 3rem;
+  width: 100%;
+  max-width: 200px;
+  font-size: 1.1rem;
+  background-color: #646cff;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* button:hover {
+  background-color: #5a5fd7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+} */
+
+.error-message {
+  padding-top: 2rem;
+}
+
+.error-message p {
+  color: rgb(255, 112, 112);
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  .register-container {
+    padding: 2rem;
+  }
+
+  h1 {
+    margin-bottom: 2.5rem;
+  }
+
+  .form {
+    max-width: 500px;
+    gap: 2rem;
+  }
+
+  .form-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  label {
+    width: 140px;
+    text-align: right;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+  }
+
+  .button-container {
+    margin-top: 2rem;
+  }
+
+  button {
+    width: auto;
+    padding: 0.75rem 3rem;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+  .register-container {
+    padding: 3rem;
+  }
+
+  h1 {
+    font-size: 6rem;
+  }
+
+  .form {
+    max-width: 600px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .register-container {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 10rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  label {
+    font-size: 1.1rem;
+  }
+
+  input {
+    padding: 0.875rem;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .register-container {
+    min-height: auto;
+    padding: 1rem 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .form {
+    gap: 1rem;
+  }
 }

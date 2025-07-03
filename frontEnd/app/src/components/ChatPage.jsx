@@ -14,6 +14,7 @@ function ResponsiveChatPage() {
     const [selectedRoom, setSelectedRoom] = useState('' || null);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
     const [message, setMessage] = useState('');
+    const [isActive, setIsActive] = useState(false);
     const [chatRooms, setChatRooms] = useState([]);
     const current_username = localStorage.getItem("username");
 
@@ -46,13 +47,17 @@ function ResponsiveChatPage() {
     }, []); //[] why bracket
 
     const selectRoom = (roomId, username) => {
+        setIsActive(true);
         setSelectedRoom(username);
         navigate(`/main/chats/${roomId}`);
     }
 
     useEffect(() => {
         console.log("select", selectedRoom);
+
     }, [selectedRoom]);
+
+    // console.log(roomId);
 
     // const historyMessages = selectedRoom ? messages[selectedRoom] || [] : [];
 
@@ -86,25 +91,30 @@ function ResponsiveChatPage() {
             <div className="desktop-list">
                 <p>You have {chatRooms.length} friends</p>
                 {chatRooms.map((room) =>
-                    <div className="room"
+                    <div className={`room ${roomId === String(room.roomId) ? 'active' : ''}`}
                         key={room.roomId}
                         onClick={() => selectRoom(room.roomId, room.username)}
+                    // {...console.log(room.roomId)}
                     >{room.username}</div>
                 )}
             </div>
-            {selectedRoom && (
-                <div className="desktop-chat-selected">
-                    <ChatRoom roomId={roomId} friendUsername={selectedRoom} />
-                </div>
-            )}
-            {selectedRoom == null && (
-                <div className="desktop-no-chat-selected">
-                    <h3>Select a chat to start messaging</h3>
-                    <p>Choose from your conversations on the left</p>
+            {
+                selectedRoom && (
+                    <div className="desktop-chat-selected">
+                        <ChatRoom roomId={roomId} friendUsername={selectedRoom} />
+                    </div>
+                )
+            }
+            {
+                selectedRoom == null && (
+                    <div className="desktop-no-chat-selected">
+                        <h3>Select a chat to start messaging</h3>
+                        <p>Choose from your conversations on the left</p>
 
-                </div>
-            )}
-        </div>
+                    </div>
+                )
+            }
+        </div >
     );
 
 };

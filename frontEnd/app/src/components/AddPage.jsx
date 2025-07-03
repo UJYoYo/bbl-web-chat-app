@@ -100,7 +100,7 @@ function AddPage() {
                         onChange={handleInputChange}
                         placeholder="Search your friend's username"
                     />
-                    <button type="submit">Search</button>
+                    <button className="search-button" type="submit">Search</button>
                 </form>
             </div>
             <div className="result-container">

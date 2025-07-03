@@ -8,6 +8,7 @@ function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ function Register() {
     } catch (error) {
       // Error handling is already done in the centralized API
       console.error('Registration failed:', error.message);
+      setErrorMessage(error.message);
     }
   };
 
@@ -58,7 +60,11 @@ function Register() {
             <button type="submit">Register</button>
           </div>
         </form>
-
+        {errorMessage != '' && (
+          <div className="error-message">
+            <p>{errorMessage}</p>
+          </div>
+        )}
       </div>
     </>
   );

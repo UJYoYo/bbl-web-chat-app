@@ -29,24 +29,26 @@ p {
 }
 
 .button-container {
-    display: flex !important;
+    display: flex;
     gap: 1em;
-    align-items: center !important;
-    justify-content: center !important;
+    align-items: center;
+    justify-content: center;
     margin: 0;
 }
 
-button {
-    padding: 0.75rem 1rem !important;
-    border: none !important;
-    border-radius: 5px;
+.refresh-button {
+    padding: 1rem 1rem;
+    border: none;
+    border-radius: 9px;
     cursor: pointer;
-    margin: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: 1 !important;
-    vertical-align: middle !important;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: middle;
+    background-color: white;
+
 }
 
 .accept-button {
@@ -57,4 +59,38 @@ button {
 .decline-button {
     background-color: #dc3545;
     color: white;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.refresh-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.solid {
+    margin-top: 1.5rem;
+    color: rgba(255, 255, 255, 0.175)
+}
+
+
+@media (max-width: 700px) {
+    .bar-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .bar-container p {
+        font-size: 20px;
+    }
+
+    .request-container {
+        padding-top: 1.5rem;
+    }
 }

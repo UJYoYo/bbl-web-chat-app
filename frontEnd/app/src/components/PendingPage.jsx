@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { friendsAPI } from './Api.jsx';
 import '../styles/PendingPage.css'
+import RefreshIcon from '../assets/refresh-icon.svg'
 
 function PendingPage() {
     //variable store pending requests
@@ -8,7 +9,8 @@ function PendingPage() {
     const current_username = localStorage.getItem("username");
     const current_userId = localStorage.getItem("userId");
     console.log(current_userId);
-    useEffect(() => {
+
+    const getPendingRequest = () => {
         const fetchData = async () => {
             try {
                 const pendingQuery = await friendsAPI.getPendingRequests(current_username);
@@ -22,7 +24,13 @@ function PendingPage() {
             }
         };
         fetchData();
+    }
+
+    useEffect(() => {
+        getPendingRequest();
     }, []);
+
+
     useEffect(() => {
         console.log("pending request state updated:", pendingRequests);
     }, [pendingRequests]);
@@ -33,7 +41,7 @@ function PendingPage() {
         try {
             const updateState = await friendsAPI.sendRequestStatus(senderId, current_userId, "accepted");
             if (updateState) {
-                const newList = pendingRequests.filter(req => req.id !== senderId);
+                const newList = pendingRequests.filter(req => req.userId !== senderId);
                 setPendingRequests(newList);
                 console.log("Added user");
             }
@@ -48,7 +56,7 @@ function PendingPage() {
         try {
             const updateState = await friendsAPI.sendRequestStatus(senderId, current_userId, "rejected");
             if (updateState) {
-                const newList = pendingRequests.filter(req => req.id !== senderId);
+                const newList = pendingRequests.filter(req => req.userId !== senderId);
                 setPendingRequests(newList);
                 console.log("Declined user");
             }
@@ -59,7 +67,13 @@ function PendingPage() {
 
     return (
         <div>
-            <p>Your {pendingRequests.length} friends(?) are waiting for your acceptance</p>
+            <div className="bar-container">
+                <p>Can't believe {pendingRequests.length} soul(s) want to be your friends</p>
+                <button className="refresh-button" onClick={getPendingRequest}>
+                    <img className="refresh-icon" src={RefreshIcon} alt="Refresh"></img>
+                </button>
+            </div>
+            <hr className="solid"></hr>
             <div>
                 {pendingRequests.length > 0 &&
                     (

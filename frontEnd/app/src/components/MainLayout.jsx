@@ -6,7 +6,7 @@ function MainLayout() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
   const location = useLocation();
 
-  const chatOnMobile = isMobile && location.pathname.includes('/main/chats');
+  const chatOnMobile = isMobile && location.pathname.includes('match(/^\/main\/chats\/\w+$/)');
   // console.log(isMobile);
   // console.log(location.pathname);
   useEffect(() => {
@@ -27,7 +27,10 @@ function MainLayout() {
     <div className="chat-layout">
       {!chatOnMobile && (
         <header className="chat-header">
-          <h1>BALAPAO </h1>
+          <div className="title-and-profile">
+            <h1>BALAPAO</h1>
+            <p>Username: {localStorage.getItem('username')}</p>
+          </div>
           <nav>
             <NavLink
               to='/main/chats'
