@@ -1,6 +1,6 @@
 
 const API_CONFIG = {
-    baseURL: "http://34.87.125.159",
+    baseURL: "http://35.185.181.59",
     headers: {
         'Content-Type': 'application/json',
     }
